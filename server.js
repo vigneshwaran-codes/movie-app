@@ -1,14 +1,13 @@
 import express from 'express'
 import { MongoClient } from 'mongodb'
-import dotenv from 'dotenv'
 import { movieRouter } from './routes/moviePost.js'
 import { userRouter } from './routes/login.js'
+import dotenv from 'dotenv'
 
 const app = express()
-const PORT = process.env.PORT
-
 dotenv.config()
 
+const PORT = process.env.PORT
 app.use(express.json())
 
 app.use('/user', userRouter)
@@ -31,4 +30,3 @@ app.get('/', (req, res) => {
 })
 
 app.listen(PORT, () => console.log('Successfully Connected', PORT))
-git 

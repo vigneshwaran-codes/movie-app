@@ -2,15 +2,18 @@ import express from 'express'
 import { createConnection } from '../server.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { auth } from '../middleware/auth.js'
 import { createUser, getUsers, getUser } from '../db.js'
 
 const router = express.Router()
 
-router.route('/').get(async (req, res) => {
-  const client = await createConnection()
-  const users = await getUsers(client, {})
-  res.send(users)
-})
+router
+  .route('/')
+  .get(auth, async (req, res) => {
+    const client = await createConnection()
+    const users = await getUsers(client, {})
+    res.send(users)
+  })
 
 router.route('/signup').post(async (req, res) => {
   const { username, password } = req.body
@@ -38,11 +41,11 @@ router.route('/login').post(async (req, res) => {
     res.send({ message: 'Successfully Login', token: token })
   }
 })
-export const userRouter = router
 
 async function genPassword (passcode) {
   const salt = await bcrypt.genSalt(12)
   const hashedPassword = await bcrypt.hash(passcode, salt)
   return hashedPassword
 }
-genPassword('password@123')
+
+export const userRouter = router

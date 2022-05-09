@@ -15,7 +15,7 @@ router
   .route('/')
   .get(async (req, res) => {
     const client = await createConnection()
-    const moviePosts = getMoviePost(client)
+    const moviePosts = await getMoviePost(client)
     res.send(moviePosts)
     console.log(moviePosts)
   }).post(async (req, res) => {
